@@ -1,4 +1,4 @@
-{% set version = "0.1.1" %}
+{% set version = "0.2.0" %}
 
 package:
   name: doitoml-split
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/d/doitoml/doitoml-{{ version }}.tar.gz
-  sha256: 3db37d34859e6c0b77f03a56b394a288b6b4f8cf317edda63c113dff8245de2e
+  sha256: d81bc676ba42ef5558116accb5b35c08a40b679c3251f6d99484b0b6fa6f79f8
 
 build:
   noarch: python
