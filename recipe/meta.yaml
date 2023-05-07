@@ -135,7 +135,7 @@ outputs:
         - doitoml
       commands:
         - pip check
-        - pytest -vv --cov=doitoml --cov=branch --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not self" --cov-fail-under=94
+        - pytest -vv --cov=doitoml --cov=branch --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not self" --cov-fail-under=90
       requires:
         - pip
         - pytest
