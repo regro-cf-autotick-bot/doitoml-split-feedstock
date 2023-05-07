@@ -130,6 +130,7 @@ outputs:
       source_files:
         - test
         - pyproject.toml
+        - examples
       imports:
         - doitoml
       commands:
@@ -143,6 +144,7 @@ outputs:
         - pytest-html
         - pytest-json-report
         - pytest-xdist
+        - python-build
         - tomli-w
 
 about:
