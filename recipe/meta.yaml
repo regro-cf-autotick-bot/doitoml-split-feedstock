@@ -5,18 +5,18 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/d/doitoml/doitoml-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/d/doitoml/doitoml-{{ version }}.tar.gz
   sha256: d81bc676ba42ef5558116accb5b35c08a40b679c3251f6d99484b0b6fa6f79f8
 
 build:
   noarch: python
-  number: 0
+  number: 1
 
 requirements:
   host:
-    - python >=3.8
+    - python {{ python_min }}
   run:
-    - python >=3.8
+    - python >={{ python_min }}
 
 outputs:
   - name: doitoml
@@ -27,10 +27,10 @@ outputs:
       host:
         - flit-core >=3.7.1,<4
         - pip
-        - python >=3.8
+        - python {{ python_min }}
       run:
         - doit >=0.36
-        - python >=3.8
+        - python >={{ python_min }}
         - tomli
         - typing_extensions
     test:
@@ -46,10 +46,10 @@ outputs:
       noarch: python
     requirements:
       host:
-        - python >=3.8
+        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >=3.8
+        - python >={{ python_min }}
         - jinja2 >=3
     test:
       imports:
@@ -64,9 +64,9 @@ outputs:
       noarch: python
     requirements:
       host:
-        - python >=3.8
+        - python {{ python_min }}
       run:
-        - python >=3.8
+        - python >={{ python_min }}
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
         - json-e >=4
     test:
@@ -82,10 +82,10 @@ outputs:
       noarch: python
     requirements:
       host:
-        - python >=3.8
+        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >=3.8
+        - python >={{ python_min }}
         - jsonschema >=4
     test:
       imports:
@@ -100,10 +100,10 @@ outputs:
       noarch: python
     requirements:
       host:
-        - python >=3.8
+        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >=3.8
+        - python >={{ python_min }}
         - pyyaml >=5
     test:
       imports:
@@ -118,14 +118,14 @@ outputs:
       noarch: python
     requirements:
       host:
-        - python >=3.8
+        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-jinja2", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-json-e", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-jsonschema", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-yaml", max_pin="x.x.x") }}
-        - python >=3.8
+        - python >={{ python_min }}
     test:
       source_files:
         - test
@@ -146,6 +146,7 @@ outputs:
         - pytest-xdist
         - python-build
         - tomli-w
+        - python {{ python_min }}
 
 about:
   summary: Load declarative tasks for doit from TOML, JSON, YAML, and other files.
