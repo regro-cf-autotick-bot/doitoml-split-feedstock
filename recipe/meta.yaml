@@ -1,7 +1,9 @@
 {% set version = "0.2.0" %}
 
+{% set PYTHON = PYTHON | default("$PYTHON") %} 
+
 package:
-  name: doitoml-split
+  name: doitoml
   version: {{ version }}
 
 source:
@@ -9,47 +11,39 @@ source:
   sha256: d81bc676ba42ef5558116accb5b35c08a40b679c3251f6d99484b0b6fa6f79f8
 
 build:
-  noarch: python
   number: 1
+  noarch: python
+  script:
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
 
 requirements:
   host:
+    - flit-core >=3.9.0,<4
+    - pip
     - python {{ python_min }}
   run:
+    - doit >=0.36
     - python >={{ python_min }}
+    - tomli
+    - typing_extensions
+test:
+  requires:
+    - pip
+    - python {{ python_min }}
+  imports:
+    - doitoml
+  commands:
+    - pip check
 
 outputs:
   - name: doitoml
-    build:
-      noarch: python
-      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-    requirements:
-      host:
-        - flit-core >=3.7.1,<4
-        - pip
-        - python {{ python_min }}
-      run:
-        - doit >=0.36
-        - python >={{ python_min }}
-        - tomli
-        - typing_extensions
-    test:
-      imports:
-        - doitoml
-      commands:
-        - pip check
-      requires:
-        - pip
 
   - name: doitoml-with-jinja2
     build:
-      noarch: python
+      noarch: generic
     requirements:
-      host:
-        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >={{ python_min }}
         - jinja2 >=3
     test:
       imports:
@@ -58,84 +52,71 @@ outputs:
         - pip check
       requires:
         - pip
+        - python {{ python_min }}
 
   - name: doitoml-with-json-e
     build:
-      noarch: python
+      noarch: generic
     requirements:
-      host:
-        - python {{ python_min }}
       run:
-        - python >={{ python_min }}
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
         - json-e >=4
     test:
+      requires:
+        - pip
+        - python {{ python_min }}
       imports:
         - doitoml.templaters.jsone
       commands:
         - pip check
-      requires:
-        - pip
 
   - name: doitoml-with-jsonschema
     build:
       noarch: python
     requirements:
-      host:
-        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >={{ python_min }}
         - jsonschema >=4
     test:
+      requires:
+        - pip
+        - python {{ python_min }}
       imports:
         - doitoml.schema.validator
       commands:
         - pip check
-      requires:
-        - pip
 
   - name: doitoml-with-yaml
     build:
       noarch: python
     requirements:
-      host:
-        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
-        - python >={{ python_min }}
         - pyyaml >=5
     test:
+      requires:
+        - pip
+        - python {{ python_min }}
       imports:
         - doitoml.sources.yaml._yaml
       commands:
         - pip check
-      requires:
-        - pip
 
   - name: doitoml-with-all
     build:
-      noarch: python
+      noarch: generic
     requirements:
-      host:
-        - python {{ python_min }}
       run:
         - {{ pin_subpackage("doitoml", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-jinja2", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-json-e", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-jsonschema", max_pin="x.x.x") }}
         - {{ pin_subpackage("doitoml-with-yaml", max_pin="x.x.x") }}
-        - python >={{ python_min }}
     test:
       source_files:
         - test
         - pyproject.toml
         - examples
-      imports:
-        - doitoml
-      commands:
-        - pip check
-        - pytest -vv --cov=doitoml --cov=branch --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not self" --cov-fail-under=90
       requires:
         - pip
         - pytest
@@ -144,16 +125,20 @@ outputs:
         - pytest-html
         - pytest-json-report
         - pytest-xdist
+        - python {{ python_min }}
         - python-build
         - tomli-w
-        - python {{ python_min }}
+      imports:
+        - doitoml
+      commands:
+        - pip check
+        - pytest -vv --cov=doitoml --cov=branch --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not self" --cov-fail-under=90
 
 about:
   summary: Load declarative tasks for doit from TOML, JSON, YAML, and other files.
   home: https://github.com/deathbeds/doitoml
   license: BSD-3-Clause
-  license_file:
-    - LICENSE.txt
+  license_file: LICENSE.txt
   doc_url: https://doitoml.rtfd.io
 
 extra:
